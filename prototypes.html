@@ -1,0 +1,455 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sacred Strength · App prototypes</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a working phone (or coach desk) on the left, a notes panel on the right; stacks on phones. */
+:root{
+  --bg:#F3F1F6; --surface:#FFFFFF; --surface-2:#F7F5FA; --line:#E2DDE8;
+  --ink:#271D30; --muted:#6B6276; --accent:#A8336A; --accent-soft:#F6E3EC; --on-accent:#FFFFFF;
+  --men:#B33D6E; --fol:#2F8A72; --ovu:#D69A2E; --lut:#6A5AA6;
+  --good:#2F8A55; --warn:#B7791F; --crit:#B23A3A;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --r:14px; --device:#2A2130;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151019; --surface:#211A27; --surface-2:#1B1520; --line:#3A3141;
+  --ink:#F1ECF5; --muted:#A99FB3; --accent:#E3709E; --accent-soft:#3D2231; --on-accent:#1A1016;
+  --men:#E0719B; --fol:#4FBF9C; --ovu:#E7B455; --lut:#9B8BDB;
+  --good:#5CC98A; --warn:#E3A84B; --crit:#E46B6B; --device:#4A3F52; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#151019; --surface:#211A27; --surface-2:#1B1520; --line:#3A3141;
+  --ink:#F1ECF5; --muted:#A99FB3; --accent:#E3709E; --accent-soft:#3D2231; --on-accent:#1A1016;
+  --men:#E0719B; --fol:#4FBF9C; --ovu:#E7B455; --lut:#9B8BDB;
+  --good:#5CC98A; --warn:#E3A84B; --crit:#E46B6B; --device:#4A3F52; color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 40px}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;display:grid;gap:20px}
+.top{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px}
+.brand h1{font-size:clamp(24px,4vw,34px)}
+.brand p{color:var(--muted);max-width:60ch;margin-top:6px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px}
+.tabs button{border:0;background:none;padding:8px 14px;border-radius:999px;font-weight:600;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.stage{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:28px;align-items:start}
+.stage.desk-mode{grid-template-columns:minmax(0,1fr) minmax(0,320px)}
+@media (max-width:820px){.stage,.stage.desk-mode{grid-template-columns:minmax(0,1fr)}}
+/* phone */
+.phone{width:100%;max-width:390px;margin:0 auto;height:760px;max-height:85vh;min-height:600px;border-radius:40px;border:10px solid var(--device);background:var(--surface);display:flex;flex-direction:column;overflow:hidden;position:relative}
+.screen{flex:1;overflow-y:auto;padding:18px 18px 24px;display:flex;flex-direction:column;gap:14px}
+.appbar{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.appbar .hi{font-family:var(--display);font-size:22px;font-weight:700}
+.appbar .date{color:var(--muted);font-size:13px}
+.nav{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:var(--surface)}
+.nav button{border:0;background:none;padding:10px 4px 12px;font-size:12.5px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:4px}
+.nav button svg{width:20px;height:20px}
+.nav button[aria-current="page"]{color:var(--accent)}
+.card{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:8px}
+.card.hl{background:var(--accent-soft);border-color:var(--accent)}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.big{font-family:var(--display);font-size:20px;font-weight:700}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 14px;font-weight:600}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.ghost{background:none}
+.btn.full{width:100%}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);font-weight:700}
+.ringwrap{display:flex;gap:14px;align-items:center}
+.ringwrap svg{width:132px;height:132px;flex:none}
+.phase-name{font-family:var(--display);font-size:21px;font-weight:700}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.week{display:flex;flex-direction:column}
+.wday{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}
+.wday.today{background:var(--accent-soft);border-radius:10px;border-bottom-color:transparent}
+.wday .d{font-weight:700;font-size:13px}
+.wday .d small{display:block;font-weight:500;color:var(--muted)}
+.wday .s{min-width:0}
+.wday .s b{display:block;font-weight:600}
+.wday .s span{font-size:12.5px;color:var(--muted)}
+.pill{font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 9px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.energy{display:flex;gap:8px}
+.energy button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-weight:700}
+.energy button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+label.f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px}
+input[type=date],input[type=text],input[type=number],textarea,select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%}
+textarea{min-height:76px;resize:vertical}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.check input{margin-top:4px;accent-color:var(--accent)}
+.entry{border-bottom:1px solid var(--line);padding:10px 0;display:flex;flex-direction:column;gap:4px}
+.entry:last-child{border-bottom:0}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block}
+.dots i.on{background:var(--accent)}
+.toast{position:absolute;left:50%;bottom:76px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}
+.steps{display:flex;gap:4px}
+.steps i{height:4px;flex:1;border-radius:4px;background:var(--line)}
+.steps i.on{background:var(--accent)}
+/* notes */
+.notes{display:flex;flex-direction:column;gap:16px;min-width:0}
+.notes h2{font-size:24px}
+.notes .lead{font-size:16px}
+.notes ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.notes .box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px}
+.tag{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+/* coach desk */
+.desk{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:620px;font-variant-numeric:tabular-nums}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr.sel td{background:var(--accent-soft)}
+tr.click{cursor:pointer}
+tr.click:hover td{background:var(--surface-2)}
+.detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:640px){.detail{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:no-preference){.screen{scroll-behavior:smooth}}
+</style>
+</head><body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Sacred Strength prototypes</h1>
+      <p><a href="index.html" target="_top" style="color:var(--accent);font-weight:600">&larr; Back to the project site</a></p><p>Three working sketches to try out with Heather. Everything you enter stays in this browser. Names and entries are examples.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Prototype">
+      <button role="tab" id="tab-cycle" data-tab="cycle">1 · Cycle-guided</button>
+      <button role="tab" id="tab-feelings" data-tab="feelings">2 · Feelings-guided</button>
+      <button role="tab" id="tab-coach" data-tab="coach">3 · Heather's view</button>
+    </div>
+  </header>
+  <main class="stage" id="stage">
+    <section id="device" aria-live="polite"></section>
+    <aside class="notes" id="notes"></aside>
+  </main>
+</div>
+
+<script>
+(function(){
+const KEY='sacred-strength-proto-v1';
+const DAY=864e5;
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const fromIso=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const TODAY=(()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())})();
+const add=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const diff=(a,b)=>Math.round((a-b)/DAY);
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const nice=d=>`${DOW[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const SESS={
+  strengthHeavy:{name:'Strength, heavier',mins:45,type:'strength',level:3,detail:'Full body. Lift a little heavier if it feels good.'},
+  yogaPower:{name:'Strong yoga flow',mins:40,type:'yoga',level:3,detail:'Longer holds and standing balances.'},
+  strengthSteady:{name:'Strength, steady',mins:35,type:'strength',level:2,detail:'Lower body, slow and controlled.'},
+  yogaFlow:{name:'Yoga flow',mins:30,type:'yoga',level:2,detail:'A moving flow to wake the body up.'},
+  longWalk:{name:'Long walk',mins:45,type:'walk',level:2,detail:'Somewhere green if you can.'},
+  yogaRest:{name:'Restorative yoga',mins:20,type:'yoga',level:1,detail:'Floor-based, supported poses. Slow breathing.'},
+  walk:{name:'Walk outside',mins:15,type:'walk',level:1,detail:'Easy pace. Notice what you can hear.'},
+  mindful:{name:'Mindful pause',mins:10,type:'mind',level:1,detail:'Sit, breathe and check in with your body.'},
+  rest:{name:'Rest day',mins:0,type:'rest',level:0,detail:'Rest is part of the plan.'}
+};
+const ORDER={3:['strengthHeavy','yogaPower','strengthSteady','longWalk'],2:['strengthSteady','yogaFlow','longWalk'],1:['yogaRest','walk','mindful']};
+const LIKES=[['strength','Strength'],['yoga','Yoga'],['walk','Walking'],['mind','Mindfulness']];
+function pick(level,likes){const l=Math.max(1,Math.min(3,level));const c=ORDER[l].filter(k=>likes.includes(SESS[k].type));return c[0]||ORDER[l][0]}
+function options(level,likes){const out=[];for(const l of [level,level-1,1]){if(l<1||l>3)continue;for(const k of ORDER[l]){if((likes.includes(SESS[k].type)||k==='mindful')&&!out.includes(k))out.push(k)}}return out.slice(0,3)}
+
+const PHASES={men:{name:'Menstrual',col:'var(--men)',text:'Energy is often lower now. Rest counts as training. Gentle movement if you want it.'},
+fol:{name:'Follicular',col:'var(--fol)',text:'Energy often rises in this phase. A good time to build strength or try something new.'},
+ovu:{name:'Ovulatory',col:'var(--ovu)',text:'Many women feel strongest around now. Go for it if you feel it.'},
+lut:{name:'Luteal',col:'var(--lut)',text:'Energy can dip towards the end of this phase. Steady sessions and more recovery.'}};
+function phaseOf(day,len){if(day<=5)return'men';if(day>=len-15&&day<=len-13)return'ovu';if(day<len-15)return'fol';return'lut'}
+function levelOf(day,len){const p=phaseOf(day,len);if(p==='men')return 1;if(p==='fol')return day<=8?2:3;if(p==='ovu')return 3;return day>len-5?1:2}
+function cycleDay(p,date){if(!p.lastStart)return null;return diff(date,fromIso(p.lastStart))+1}
+
+/* ---------- sample data ---------- */
+function makeLogs(spec){return spec.map(([ago,energy,mood,sym,note,period])=>({date:iso(add(TODAY,-ago)),energy,mood,symptoms:sym||[],note:note||'',period:!!period,shared:true}))}
+function sample(){
+  return {
+    tab:'cycle',screen:{cycle:'today',feelings:'today'},coachSel:'sam',onboard:null,
+    notes:{cycle:'Thursday could be a strong day. Enjoy it, or ease off if your body says no.',feelings:''},
+    profiles:{
+      cycle:{name:'Sam',mode:'cycle',lastStart:iso(add(TODAY,-8)),startKind:'known',len:28,irregular:false,sessions:4,likes:['strength','yoga','walk','mind'],style:'plan',done:{},periods:[],
+        logs:makeLogs([[8,2,['Tired'],['Cramps'],'First day. Stayed in with a hot water bottle.',true],[7,2,['Calm'],['Cramps']],[6,3,['Calm'],[]],[5,3,['Calm'],[],'Short walk at lunch felt good.'],[4,3,['Happy'],[]],[3,4,['Happy'],[]],[2,4,['Motivated'],[],'Strength session felt easy today.'],[1,4,['Happy'],[]]])},
+      feelings:{name:'Jo',mode:'feelings',lastStart:null,startKind:'unsure',len:28,irregular:true,sessions:3,likes:['yoga','walk','mind'],style:'options',done:{},periods:[iso(add(TODAY,-41))],
+        logs:makeLogs([[9,3,['Calm'],[]],[8,2,['Irritable'],['Poor sleep'],'Woke up hot at 3am again.'],[7,2,['Tired'],['Poor sleep']],[6,3,['Calm'],[]],[5,4,['Happy'],[],'Lovely walk by the estuary.'],[4,3,['Calm'],[]],[3,2,['Anxious'],['Headache']],[2,1,['Low'],['Poor sleep'],'Rough night. Felt flat all day.'],[1,2,['Tired'],[]]])}
+    }
+  };
+}
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
+if(!S||!S.profiles)S=sample();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+
+/* ---------- plans ---------- */
+function weekPlan(p){
+  const days=[...Array(7)].map((_,i)=>add(TODAY,i));
+  if(p.mode==='cycle'&&p.lastStart){
+    const info=days.map(d=>{let cd=cycleDay(p,d);const late=cd>p.len;const c=((cd-1)%p.len+p.len)%p.len+1;return{date:d,day:c,late,phase:phaseOf(c,p.len),level:levelOf(c,p.len)}});
+    const idx=info.map((x,i)=>i).sort((a,b)=>info[b].level-info[a].level||a-b);
+    const chosen=[];
+    for(const i of idx){if(chosen.length>=p.sessions)break;if(!chosen.some(j=>Math.abs(j-i)===1))chosen.push(i)}
+    for(const i of idx){if(chosen.length>=p.sessions)break;if(!chosen.includes(i))chosen.push(i)}
+    const lowFirst=info.map((x,i)=>i).filter(i=>!chosen.includes(i)).sort((a,b)=>info[a].level-info[b].level||a-b);
+    const restIdx=lowFirst[0];
+    return info.map((x,i)=>{let key;if(chosen.includes(i))key=pick(x.level,p.likes);else if(i===restIdx)key='rest';else key=x.level>=2?(i%2?'walk':'mindful'):'mindful';return{...x,key,session:chosen.includes(i)}});
+  }
+  const slots={2:[1,4],3:[0,2,4],4:[0,2,4,5],5:[0,1,3,4,5]}[p.sessions]||[0,2,4];
+  const others=[...Array(7).keys()].filter(i=>!slots.includes(i));
+  return days.map((d,i)=>({date:d,session:slots.includes(i),key:slots.includes(i)?null:(i===others[others.length-1]?'rest':(i%2?'walk':'mindful'))}));
+}
+function todayLog(p){return p.logs.find(l=>l.date===iso(TODAY))}
+function energyLevel(e){return e<=2?1:e===3?2:3}
+
+/* ---------- small svg helpers ---------- */
+function ring(p,day,estimate){
+  const len=p.len,cx=66,cy=66,r=52,sw=12;
+  const a=d=>(d-1)/len*2*Math.PI-Math.PI/2;
+  const pt=d=>[cx+r*Math.cos(a(d)),cy+r*Math.sin(a(d))];
+  const seg=(d0,d1,col)=>{const [x0,y0]=pt(d0+0.08),[x1,y1]=pt(d1+1-0.08);const large=(d1+1-d0)/len>0.5?1:0;return`<path d="M${x0.toFixed(1)} ${y0.toFixed(1)}A${r} ${r} 0 ${large} 1 ${x1.toFixed(1)} ${y1.toFixed(1)}" fill="none" stroke="${col}" stroke-width="${sw}"${estimate?' stroke-dasharray="5 4"':''}/>`};
+  const [mx,my]=pt(day+0.5);
+  return`<svg viewBox="0 0 132 132" role="img" aria-label="Cycle day ${day} of about ${len}">${seg(1,5,'var(--men)')}${seg(6,len-16,'var(--fol)')}${seg(len-15,len-13,'var(--ovu)')}${seg(len-12,len,'var(--lut)')}<circle cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" r="8" fill="var(--ink)" stroke="var(--surface)" stroke-width="3"/><text x="${cx}" y="${cy+2}" text-anchor="middle" font-family="Bricolage Grotesque, system-ui" font-weight="700" font-size="22" fill="var(--ink)">Day ${day}</text><text x="${cx}" y="${cy+20}" text-anchor="middle" font-size="11" fill="var(--muted)">${estimate?'estimated':'of about '+len}</text></svg>`;
+}
+function spark(logs,w=300,h=70){
+  const days=[...Array(10)].map((_,i)=>iso(add(TODAY,i-9)));
+  const pts=days.map((d,i)=>{const l=logs.find(x=>x.date===d);return l?{i,e:l.energy}:null}).filter(Boolean);
+  if(!pts.length)return'';
+  const X=i=>12+i*(w-24)/9,Y=e=>h-14-(e-1)*(h-28)/4;
+  const line=pts.map((p,k)=>`${k?'L':'M'}${X(p.i).toFixed(1)} ${Y(p.e).toFixed(1)}`).join('');
+  const area=`${line}L${X(pts[pts.length-1].i).toFixed(1)} ${h-14}L${X(pts[0].i).toFixed(1)} ${h-14}Z`;
+  const last=pts[pts.length-1];
+  return`<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Energy over the last 10 days"><line x1="12" x2="${w-12}" y1="${Y(3)}" y2="${Y(3)}" stroke="var(--line)" stroke-dasharray="3 4"/><path d="${area}" fill="var(--accent)" fill-opacity=".12"/><path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2"/>${pts.map(p=>`<circle cx="${X(p.i).toFixed(1)}" cy="${Y(p.e).toFixed(1)}" r="${p===last?4.5:2.5}" fill="var(--accent)"/>`).join('')}<text x="12" y="${h-1}" font-size="10" fill="var(--muted)">10 days ago</text><text x="${w-12}" y="${h-1}" font-size="10" text-anchor="end" fill="var(--muted)">today</text></svg>`;
+}
+function miniSpark(logs){
+  const days=[...Array(7)].map((_,i)=>iso(add(TODAY,i-6)));
+  return`<svg viewBox="0 0 84 24" width="84" height="24" aria-hidden="true">${days.map((d,i)=>{const l=logs.find(x=>x.date===d&&x.shared!==false);const h=l?l.energy*4:2;return`<rect x="${i*12}" y="${22-h}" width="8" height="${h}" rx="2" fill="${l?(l.energy<=2?'var(--warn)':'var(--accent)'):'var(--line)'}"/>`}).join('')}</svg>`;
+}
+const dots=e=>`<span class="dots" aria-label="Energy ${e} of 5">${[1,2,3,4,5].map(i=>`<i class="${i<=e?'on':''}"></i>`).join('')}</span>`;
+const ICON={today:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="4" r="2" fill="currentColor"/></svg>',week:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',checkin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',diary:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h10a2 2 0 0 1 2 2v14H8a2 2 0 0 1-2-2z"/><path d="M9 9h6M9 13h6"/></svg>'};
+
+/* ---------- client app ---------- */
+let toastMsg='';
+function client(){
+  const t=S.tab,p=S.profiles[t];
+  if(S.onboard&&S.onboard.tab===t)return onboarding();
+  const scr=S.screen[t];
+  const body={today:todayScreen,week:weekScreen,checkin:checkinScreen,diary:diaryScreen}[scr](p);
+  return`<div class="phone"><div class="screen" id="screen">${body}</div>${toastMsg?`<div class="toast" role="status">${esc(toastMsg)}</div>`:''}<nav class="nav" aria-label="App">${[['today','Today'],['week','Week'],['checkin','Check in'],['diary','Diary']].map(([k,l])=>`<button data-go="${k}" ${scr===k?'aria-current="page"':''}>${ICON[k]}${l}</button>`).join('')}</nav></div>`;
+}
+function appbar(p){return`<div class="appbar"><span class="hi">Hi ${esc(p.name)}</span><span class="date">${nice(TODAY)}</span></div>`}
+function sessionCard(p,plan0){
+  const log=todayLog(p);const ds=iso(TODAY);
+  let key=plan0.key,note='';
+  let opts=[];
+  if(p.mode==='cycle'){
+    if(plan0.session){
+      opts=options(plan0.level,p.likes).filter(k=>k!==key);
+      if(log&&energyLevel(log.energy)<SESS[key].level){note=`You said your energy is ${log.energy} out of 5 today, so here's a gentler option. The original is still there if you want it.`;const orig=key;key=pick(energyLevel(log.energy),p.likes);opts=[orig,...options(energyLevel(log.energy),p.likes).filter(k=>k!==key&&k!==orig)].slice(0,3)}
+    }
+  }else{
+    if(plan0.session){
+      if(!log)return`<div class="card hl"><span class="eyebrow">Today · session day</span><p class="big">Check in first</p><p>Tell us how you feel and we'll suggest options that match your energy.</p><button class="btn primary" data-go="checkin">Check in</button></div>`;
+      const lv=energyLevel(log.energy);opts=options(lv,p.likes);key=opts.shift();note=`Based on your check-in: energy ${log.energy} out of 5${log.mood.length?', feeling '+log.mood.join(', ').toLowerCase():''}.`;
+    }
+  }
+  if(p.swaps&&p.swaps[ds])key=p.swaps[ds];
+  const s=SESS[key];const done=p.done[ds]===key;
+  const alt=(p.style==='options'||p.mode==='feelings')?opts:opts.slice(0,1);
+  return`<div class="card ${plan0.session?'hl':''}"><span class="eyebrow">Today${plan0.session?' · session day':''}</span><p class="big">${s.name}${s.mins?` · ${s.mins} min`:''}</p><p>${s.detail}</p>${note?`<p class="small muted">${esc(note)}</p>`:''}
+  <div class="row"><button class="btn ${done?'':'primary'}" data-done="${key}">${done?'Done ✓':'Mark as done'}</button></div>
+  ${alt.length?`<div class="small muted">${p.style==='options'||p.mode==='feelings'?'Or choose:':'Not feeling it? Swap for:'}</div><div class="row">${alt.filter(k=>k!==key).map(k=>`<button class="chip" data-swap="${k}">${SESS[k].name}${SESS[k].mins?` · ${SESS[k].mins}m`:''}</button>`).join('')}</div>`:''}</div>`;
+}
+function todayScreen(p){
+  const plan=weekPlan(p);const log=todayLog(p);
+  let top='';
+  if(p.mode==='cycle'){
+    const cd=cycleDay(p,TODAY);
+    if(cd>p.len){top=`<div class="card"><span class="eyebrow">Day ${cd}</span><p class="big">Your period may be due</p><p>It's a little later than your usual ${p.len} days. That's common. Log it in Check in when it starts and the plan will reset around it.</p></div>`}
+    else{const ph=PHASES[phaseOf(cd,p.len)];const left=p.len-cd+1;
+    top=`<div class="ringwrap">${ring(p,cd,p.startKind==='guess')}<div><span class="eyebrow">${p.startKind==='guess'?'Estimated phase':'Your phase'}</span><p class="phase-name" style="color:${ph.col}">${ph.name}</p><p class="small muted">Next period in about ${left} day${left===1?'':'s'}</p></div></div>
+    <p>${ph.text}</p><p class="small muted">Everyone's different. Check in and adjust to how you actually feel.</p>`}
+  }else{
+    top=`<div class="card"><span class="eyebrow">Feelings-guided</span><p>Your plan follows how you feel, not cycle dates. The more you check in, the better it fits.</p>${spark(p.logs)}<p class="small muted">Energy, 1 to 5. Dashed line is the middle.</p></div>`;
+    if(p.periods.length>=2)top+=`<div class="card"><p><b>We could estimate your cycle now.</b> You've logged ${p.periods.length} periods. Want to try cycle-guided planning?</p><button class="btn" data-switch="cycle">Try cycle-guided</button></div>`;
+  }
+  const ci=log?`<div class="card"><span class="eyebrow">Checked in</span><div class="row">${dots(log.energy)}<span class="small">${esc(log.mood.join(', '))}</span></div></div>`:`<div class="card"><span class="eyebrow">Daily check-in</span><p>How are you feeling today? It takes a few seconds.</p><button class="btn primary" data-go="checkin">Check in</button></div>`;
+  return appbar(p)+top+(p.mode==='feelings'?ci+sessionCard(p,plan[0]):sessionCard(p,plan[0])+ci);
+}
+function weekScreen(p){
+  const plan=weekPlan(p);const note=S.notes[S.tab];
+  const rows=plan.map((x,i)=>{
+    let s,sub;
+    if(x.key){s=SESS[x.key];sub=s.mins?`${s.mins} min`:'Recovery';}
+    const done=p.done[iso(x.date)];
+    const label=x.key?`<b>${s.name}</b><span>${sub}${done?' · done ✓':''}</span>`:`<b>Session, chosen on the day</b><span>Pick from options that match your energy${done?' · done ✓':''}</span>`;
+    const chip=p.mode==='cycle'?`<span class="pill" style="background:color-mix(in srgb, ${PHASES[x.phase].col} 16%, transparent);color:${PHASES[x.phase].col}"><span class="dot" style="background:${PHASES[x.phase].col}"></span>${PHASES[x.phase].name}</span>`:(x.session?'<span class="pill" style="background:var(--accent-soft);color:var(--accent)">Session</span>':'');
+    return`<div class="wday ${i===0?'today':''}"><span class="d">${DOW[x.date.getDay()]}<small>${x.date.getDate()} ${MON[x.date.getMonth()]}</small></span><span class="s">${label}</span>${chip}</div>`}).join('');
+  let change='';
+  if(p.mode==='cycle'){for(let i=1;i<plan.length;i++){if(plan[i].phase!==plan[i-1].phase){change=`<div class="card"><span class="eyebrow">Coming up</span><p><b>${PHASES[plan[i].phase].name} phase likely from ${DOW[plan[i].date.getDay()]}.</b> The plan is placed around it.</p></div>`;break}}}
+  return`<div class="appbar"><span class="hi">Your week</span><span class="date">${p.sessions} sessions</span></div>${change}
+  <div class="week">${rows}</div>
+  <div class="card"><span class="eyebrow">Note from Heather</span><p>${note?esc(note):'<span class="muted">Heather\'s note for the week will show here. Try writing one in Heather\'s view.</span>'}</p></div>
+  ${p.mode==='cycle'?`<div class="legend">${Object.values(PHASES).map(ph=>`<span><span class="dot" style="background:${ph.col}"></span>${ph.name}</span>`).join('')}</div>`:''}`;
+}
+let draft=null;
+function checkinScreen(p){
+  const ex=todayLog(p);
+  if(!draft)draft=ex?JSON.parse(JSON.stringify(ex)):{date:iso(TODAY),energy:0,mood:[],symptoms:[],note:'',period:false,shared:true};
+  const MOODS=['Happy','Calm','Motivated','Tired','Irritable','Anxious','Low'];
+  const SYMS=['Cramps','Bloated','Headache','Poor sleep','Hot flushes','Sore'];
+  return`<div class="appbar"><span class="hi">How are you today?</span></div>
+  <div><p class="eyebrow">Energy</p><div class="energy" role="group" aria-label="Energy, 1 low to 5 high">${[1,2,3,4,5].map(n=>`<button data-energy="${n}" aria-pressed="${draft.energy===n}">${n}</button>`).join('')}</div><div class="row small muted" style="justify-content:space-between;max-width:252px;margin-top:4px"><span>Low</span><span>High</span></div></div>
+  <div><p class="eyebrow">Mood</p><div class="row">${MOODS.map(m=>`<button class="chip" data-mood="${m}" aria-pressed="${draft.mood.includes(m)}">${m}</button>`).join('')}</div></div>
+  <div><p class="eyebrow">Anything else?</p><div class="row">${SYMS.map(m=>`<button class="chip" data-sym="${m}" aria-pressed="${draft.symptoms.includes(m)}">${m}</button>`).join('')}</div></div>
+  <label class="f" for="ci-note">Diary note <span class="small muted" style="font-weight:400">How's your body, your head, your week?</span><textarea id="ci-note" placeholder="Optional">${esc(draft.note)}</textarea></label>
+  <label class="check" for="ci-period"><input type="checkbox" id="ci-period" ${draft.period?'checked':''}> My period started today</label>
+  <label class="check" for="ci-share"><input type="checkbox" id="ci-share" ${draft.shared?'checked':''}> Share this entry with Heather</label>
+  <button class="btn primary full" data-save="1" ${draft.energy?'':'disabled aria-disabled="true" style="opacity:.5"'}>${draft.energy?'Save check-in':'Choose your energy to save'}</button>`;
+}
+function diaryScreen(p){
+  const logs=[...p.logs].sort((a,b)=>b.date.localeCompare(a.date));
+  return`<div class="appbar"><span class="hi">Your diary</span><span class="date">${logs.length} entries</span></div>
+  ${p.mode==='feelings'?`<div class="card">${spark(p.logs)}</div>`:''}
+  <div>${logs.map(l=>`<div class="entry"><div class="row" style="justify-content:space-between"><b>${nice(fromIso(l.date))}</b>${dots(l.energy)}</div><span class="small">${esc([...l.mood,...l.symptoms].join(' · '))}${l.period?' · <b>Period started</b>':''}</span>${l.note?`<span class="small muted">"${esc(l.note)}"</span>`:''}${l.shared===false?'<span class="small muted">Private, not shared with Heather</span>':''}</div>`).join('')}</div>`;
+}
+
+/* ---------- onboarding ---------- */
+function onboarding(){
+  const o=S.onboard;const st=o.step;
+  const steps=`<div class="steps" aria-hidden="true">${[0,1,2,3].map(i=>`<i class="${i<=st?'on':''}"></i>`).join('')}</div>`;
+  let body='';
+  if(st===0)body=`<h2>Welcome</h2><p class="muted">A few quick questions so Heather can plan with you. You can skip anything you're not sure about.</p><label class="f" for="ob-name">What should we call you?<input type="text" id="ob-name" value="${esc(o.name)}" placeholder="First name"></label>`;
+  if(st===1)body=`<h2>Your cycle</h2><p class="muted">When did your last period start?</p>
+    <div class="row">${[['known','I know the date'],['guess','Best guess'],['unsure',"I'm not sure"]].map(([k,l])=>`<button class="chip" data-kind="${k}" aria-pressed="${o.startKind===k}">${l}</button>`).join('')}</div>
+    ${o.startKind!=='unsure'?`<label class="f" for="ob-date">${o.startKind==='guess'?'Roughly when?':'Start date'}<input type="date" id="ob-date" value="${o.lastStart}" max="${iso(TODAY)}"></label><label class="f" for="ob-len">Usual cycle length, in days<input type="number" id="ob-len" min="18" max="45" value="${o.len}"></label>`:'<p class="small">No problem. We\'ll start from how you feel, and you can log your period when it comes.</p>'}
+    <label class="check" for="ob-irr"><input type="checkbox" id="ob-irr" ${o.irregular?'checked':''}> My cycle is irregular or changing (for example, perimenopause)</label>
+    <label class="check" for="ob-hc"><input type="checkbox" id="ob-hc" ${o.hormonal?'checked':''}> I use hormonal contraception</label>`;
+  if(st===2)body=`<h2>Your week</h2><label class="f" for="ob-sess">How many sessions a week feel realistic?<select id="ob-sess">${[2,3,4,5].map(n=>`<option ${o.sessions===n?'selected':''}>${n}</option>`).join('')}</select></label><p class="eyebrow">What do you enjoy?</p><div class="row">${LIKES.map(([k,l])=>`<button class="chip" data-like="${k}" aria-pressed="${o.likes.includes(k)}">${l}</button>`).join('')}</div>`;
+  if(st===3){const fm=o.startKind==='unsure'||o.irregular||o.hormonal;body=`<h2>How do you like to be coached?</h2><div class="row">${[['plan','Plan it for me'],['options','Give me options']].map(([k,l])=>`<button class="chip" data-style="${k}" aria-pressed="${o.style===k}">${l}</button>`).join('')}</div><p class="small muted">Some people want a clear plan, others like to choose. You can change this any time.</p><div class="card hl"><span class="eyebrow">Your plan will be</span><p class="big">${fm?'Feelings-guided':'Cycle-guided'}</p><p class="small">${fm?'Your daily check-ins shape the plan. If a regular pattern shows up, you can switch to cycle-guided.':'Sessions are placed around your estimated phases, and adjust to your check-ins.'}</p></div>`}
+  return`<div class="phone"><div class="screen">${steps}${body}<div class="row" style="margin-top:auto;justify-content:space-between">${st?'<button class="btn ghost" data-ob="back">Back</button>':'<button class="btn ghost" data-ob="cancel">Cancel</button>'}<button class="btn primary" data-ob="${st===3?'finish':'next'}">${st===3?'Start':'Next'}</button></div></div></div>`;
+}
+
+/* ---------- coach view ---------- */
+function coachClients(){
+  const live=['cycle','feelings'].map(k=>({id:k==='cycle'?'sam':'jo',tab:k,p:S.profiles[k]}));
+  const priya={name:'Priya',mode:'cycle',lastStart:iso(add(TODAY,-23)),startKind:'guess',len:29,logs:makeLogs([[6,3,['Calm'],[]],[5,3,['Calm'],[]],[4,3,['Tired'],[]],[2,2,['Irritable'],['Bloated'],'Snappy with everyone.'],[1,2,['Tired'],['Poor sleep']],[0,1,['Low'],['Headache'],'Skipped the session. Felt guilty.']]),style:'plan'};
+  const kate={name:'Kate',mode:'cycle',lastStart:iso(add(TODAY,-15)),startKind:'known',len:27,logs:makeLogs([[9,4,['Motivated'],[]],[7,4,['Happy'],[]],[5,3,['Calm'],[],'Busy week at work.']]),style:'options'};
+  return [...live,{id:'priya',p:priya},{id:'kate',p:kate}];
+}
+function flags(p){
+  const shared=p.logs.filter(l=>l.shared!==false).sort((a,b)=>a.date.localeCompare(b.date));
+  const out=[];
+  const last=shared[shared.length-1];
+  const since=last?diff(TODAY,fromIso(last.date)):99;
+  if(since>=3)out.push(['warn',`No check-in for ${since} days`]);
+  const l3=shared.slice(-3);
+  if(l3.length===3&&l3.every(l=>l.energy<=2)&&since<3)out.push(['crit','Low energy 3 days running']);
+  if(p.mode==='cycle'&&p.lastStart&&cycleDay(p,TODAY)>p.len+2)out.push(['warn','Period may be late']);
+  if(!out.length)out.push(['good','On track']);
+  return out;
+}
+function where(p){if(p.mode!=='cycle'||!p.lastStart)return'Feelings-guided';const cd=cycleDay(p,TODAY);if(cd>p.len)return`Day ${cd} · due`;return`Day ${cd} · ${PHASES[phaseOf(cd,p.len)].name}${p.startKind==='guess'?' (est.)':''}`}
+function coach(){
+  const cl=coachClients();const sel=cl.find(c=>c.id===S.coachSel)||cl[0];
+  const pillCol={good:'var(--good)',warn:'var(--warn)',crit:'var(--crit)'};
+  const rows=cl.map(c=>{const p=c.p;const sh=p.logs.filter(l=>l.shared!==false);const last=sh.map(l=>l.date).sort().pop();return`<tr class="click ${c===sel?'sel':''}" data-client="${c.id}" tabindex="0"><td><b>${esc(p.name)}</b></td><td>${where(p)}</td><td>${last?nice(fromIso(last)):'None yet'}</td><td>${miniSpark(p.logs)}</td><td>${flags(p).map(([k,t])=>`<span class="pill" style="background:color-mix(in srgb, ${pillCol[k]} 15%, transparent);color:${pillCol[k]}">${t}</span>`).join(' ')}</td></tr>`}).join('');
+  const p=sel.p;const sh=[...p.logs].filter(l=>l.shared!==false).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
+  const noteBox=sel.tab?`<label class="f" for="coach-note">Note for ${esc(p.name)}'s week<textarea id="coach-note">${esc(S.notes[sel.tab])}</textarea></label><div class="row"><button class="btn primary" data-savenote="${sel.tab}">Send note</button><span class="small muted">Shows on the Week screen in prototype ${sel.tab==='cycle'?1:2}.</span></div>`:`<p class="small muted">Example client. Notes can be sent to Sam and Jo, who are linked to prototypes 1 and 2.</p>`;
+  return`<div class="desk"><div class="row" style="justify-content:space-between"><h2 style="font-size:22px">Clients</h2><span class="small muted">${nice(TODAY)} · example clients</span></div>
+  <div class="tablewrap"><table><thead><tr><th>Client</th><th>Where she is</th><th>Last check-in</th><th>Energy, 7 days</th><th>Needs a look</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="detail"><div class="card"><span class="eyebrow">${esc(p.name)} · recent shared entries</span>${sh.length?sh.map(l=>`<div class="entry"><div class="row" style="justify-content:space-between"><b class="small">${nice(fromIso(l.date))}</b>${dots(l.energy)}</div><span class="small">${esc([...l.mood,...l.symptoms].join(' · '))}${l.period?' · <b>Period started</b>':''}</span>${l.note?`<span class="small muted">"${esc(l.note)}"</span>`:''}</div>`).join(''):'<p class="muted">Nothing shared yet.</p>'}</div>
+  <div class="card"><span class="eyebrow">Plan and note</span><p class="small"><b>${p.mode==='cycle'?'Cycle-guided':'Feelings-guided'}</b>, prefers ${p.style==='options'?'options':'a set plan'}.</p>${noteBox}</div></div></div>`;
+}
+
+/* ---------- notes panel ---------- */
+const NOTES={
+  cycle:{h:'Cycle-guided',lead:'For women who know roughly where they are in their cycle. The week is placed around estimated phases, and the daily check-in can override it.',
+    tr:['Open <b>Week</b> to see four sessions placed around Sam\'s phases.','<b>Check in</b> with energy 1 or 2, then go back to <b>Today</b>. The session softens and the original stays as a choice.','Tick <b>My period started today</b> in a check-in. The cycle resets to day 1 and the week re-plans, with no manual spreadsheet edits.'],
+    tests:'Hypotheses 3, 4 and 10: self-reported tracking is enough, phase-based weekly guidance feels useful, about four sessions a week is achievable.'},
+  feelings:{h:'Feelings-guided',lead:'For women with irregular, unknown or changing cycles, including perimenopause and hormonal contraception. No dates needed: the check-in drives the plan.',
+    tr:['On <b>Today</b>, Jo\'s energy trend replaces the cycle ring.','<b>Check in</b> and the session options change to match the energy you gave.','Log a period in a check-in. Once two are logged, the app offers to estimate a cycle and switch.'],
+    tests:'Hypotheses 7 and 14: women without a predictable cycle want this, and a feelings-guided plan works for them.'},
+  coach:{h:"Heather's view",lead:'What replaces the spreadsheet. Heather sees who needs a look, reads what each client chose to share, and sends a personal note for the week.',
+    tr:['Click a client to read her shared diary entries.','Write a note for Sam or Jo and press <b>Send note</b>, then open prototype 1 or 2 and go to <b>Week</b>.','Entries marked private in a check-in never appear here.'],
+    tests:'Hypotheses 15 and 16: being listened to is what clients value, and Heather can keep up with logs without strain.'}
+};
+function notes(){
+  const n=NOTES[S.tab];
+  return`<div><span class="tag">Prototype ${S.tab==='cycle'?1:S.tab==='feelings'?2:3}</span><h2>${n.h}</h2></div><p class="lead">${n.lead}</p>
+  <div class="box"><span class="tag">Try this</span><ul>${n.tr.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  <div class="box"><span class="tag">What it tests</span><p>${n.tests}</p></div>
+  <div class="row">${S.tab!=='coach'?'<button class="btn" data-fresh="1">Start as a new client</button>':''}<button class="btn ghost" data-reset="1">Reset demo</button></div>
+  <p class="small muted">Prototype only. Suggestions are general wellbeing ideas, not medical advice. Phase timings are estimates and vary from person to person.</p>`;
+}
+
+/* ---------- render + events ---------- */
+const stage=document.getElementById('stage'),device=document.getElementById('device'),notesEl=document.getElementById('notes');
+function render(){
+  document.querySelectorAll('[role=tab]').forEach(b=>{const on=b.dataset.tab===S.tab;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1});
+  stage.classList.toggle('desk-mode',S.tab==='coach');
+  device.innerHTML=S.tab==='coach'?coach():client();
+  notesEl.innerHTML=notes();
+}
+function flash(m){toastMsg=m;render();setTimeout(()=>{toastMsg='';render()},2200)}
+function readOnboardInputs(){const o=S.onboard;const g=id=>document.getElementById(id);
+  if(g('ob-name'))o.name=g('ob-name').value.trim();
+  if(g('ob-date'))o.lastStart=g('ob-date').value||o.lastStart;
+  if(g('ob-len'))o.len=Math.max(18,Math.min(45,Number(g('ob-len').value)||28));
+  if(g('ob-irr'))o.irregular=g('ob-irr').checked;
+  if(g('ob-hc'))o.hormonal=g('ob-hc').checked;
+  if(g('ob-sess'))o.sessions=Number(g('ob-sess').value);}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button,tr[data-client]');if(!b)return;
+  const d=b.dataset;const t=S.tab;const p=S.profiles[t];
+  if(d.tab){S.tab=d.tab;draft=null;}
+  else if(d.go){S.screen[t]=d.go;draft=null;}
+  else if(d.done){const ds=iso(TODAY);p.done[ds]=p.done[ds]===d.done?undefined:d.done;p.swaps=p.swaps||{};p.swaps[ds]=d.done;}
+  else if(d.swap){p.swaps=p.swaps||{};p.swaps[iso(TODAY)]=d.swap;}
+  else if(d.energy){draft.energy=Number(d.energy);draft.note=document.getElementById('ci-note').value;}
+  else if(d.mood){const m=d.mood;draft.mood=draft.mood.includes(m)?draft.mood.filter(x=>x!==m):[...draft.mood,m];draft.note=document.getElementById('ci-note').value;}
+  else if(d.sym){const m=d.sym;draft.symptoms=draft.symptoms.includes(m)?draft.symptoms.filter(x=>x!==m):[...draft.symptoms,m];draft.note=document.getElementById('ci-note').value;}
+  else if(d.save){if(!draft.energy)return;draft.note=document.getElementById('ci-note').value.trim();draft.period=document.getElementById('ci-period').checked;draft.shared=document.getElementById('ci-share').checked;
+    p.logs=p.logs.filter(l=>l.date!==draft.date).concat([draft]);
+    if(p.swaps)delete p.swaps[iso(TODAY)];
+    let msg='Saved. Today has been updated.';
+    if(draft.period){if(p.mode==='cycle'){p.lastStart=iso(TODAY);p.startKind='known';msg='Saved. Day 1, and your week has been re-planned.'}else{if(!p.periods.includes(iso(TODAY)))p.periods.push(iso(TODAY));msg='Saved. Period logged.'}}
+    draft=null;S.screen[t]='today';save();return flash(msg);}
+  else if(d.switch){p.mode='cycle';const ps=[...p.periods].sort();p.lastStart=ps[ps.length-1];p.len=ps.length>1?Math.max(21,Math.min(40,diff(fromIso(ps[ps.length-1]),fromIso(ps[ps.length-2])))):28;p.startKind='guess';}
+  else if(d.fresh){S.onboard={tab:t,step:0,name:'',startKind:'known',lastStart:iso(add(TODAY,-3)),len:28,irregular:false,hormonal:false,sessions:4,likes:['strength','yoga'],style:'plan'};}
+  else if(d.reset){S=sample();draft=null;try{localStorage.removeItem(KEY)}catch(err){}save();return flash('Demo reset');}
+  else if(d.kind){readOnboardInputs();S.onboard.startKind=d.kind;}
+  else if(d.like){readOnboardInputs();const o=S.onboard;o.likes=o.likes.includes(d.like)?o.likes.filter(x=>x!==d.like):[...o.likes,d.like];}
+  else if(d.style){S.onboard.style=d.style;}
+  else if(d.ob){readOnboardInputs();const o=S.onboard;
+    if(d.ob==='next')o.step++;else if(d.ob==='back')o.step--;else if(d.ob==='cancel')S.onboard=null;
+    else if(d.ob==='finish'){const fm=o.startKind==='unsure'||o.irregular||o.hormonal;
+      S.profiles[o.tab]={name:o.name||'You',mode:fm?'feelings':'cycle',lastStart:o.startKind==='unsure'?null:o.lastStart,startKind:o.startKind,len:o.len,irregular:o.irregular,sessions:o.sessions,likes:o.likes.length?o.likes:['walk'],style:o.style,done:{},periods:[],logs:[]};
+      S.notes[o.tab]='';S.screen[o.tab]='today';S.onboard=null;save();return flash('Welcome. Your plan is ready.');}}
+  else if(d.client){S.coachSel=d.client;}
+  else if(d.savenote){S.notes[d.savenote]=document.getElementById('coach-note').value.trim();save();return flash('Note sent');}
+  else return;
+  save();render();
+});
+document.addEventListener('keydown',e=>{
+  const tr=e.target.closest&&e.target.closest('tr[data-client]');if(tr&&(e.key==='Enter'||e.key===' ')){e.preventDefault();tr.click();}
+  const tab=e.target.closest&&e.target.closest('[role=tab]');if(tab&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){const tabs=[...document.querySelectorAll('[role=tab]')];const i=tabs.indexOf(tab)+(e.key==='ArrowRight'?1:-1);const n=tabs[(i+tabs.length)%tabs.length];n.click();document.getElementById(n.id).focus();}
+});
+const h=(location.hash||'').slice(1);if(['cycle','feelings','coach'].includes(h))S.tab=h;
+render();
+})();
+</script>
+
+</body></html>
